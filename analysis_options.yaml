@@ -1,0 +1,24 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - avoid_void_async
+    - unawaited_futures
+    - unnecessary_await_in_return
+
+analyzer:
+  exclude:
+    - '**/*.g.dart'
+    - 'lib/configs/*_config.dart'
+    - 'lib/theme/ui_theme.dart'
+    - 'lib/theme/ui_color.dart'
+    - 'lib/theme/ui_text_style.dart'
+    - 'lib/injector.config.dart'
+    - 'lib/locale_keys.g.dart'
+  plugins:
+    - dart_code_metrics
+
+dart_code_metrics:
+  rules:
+    - prefer-trailing-comma
+    - prefer-conditional-expressions

@@ -1,0 +1,122 @@
+name: lucid_decision
+description: A new Flutter project.
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.5 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+
+  # Suga Core Package.
+  suga_core: ^5.0.0
+
+  # A flutter plugin for adapting screen and font size.Guaranteed to look good on different models
+  flutter_screenutil: ^5.7.0
+
+  # A declarative router for Flutter based on Navigation 2 supporting deep linking, data-driven routes and more
+  go_router: ^13.2.0
+
+  # A clean and lightweight loading/toast widget for Flutter, Easy to use without context, Support iOS、Android and Web
+  flutter_easyloading: ^3.0.5
+
+  # Injectable is a convenient code generator for get_it. Inspired by Angular DI, Guice DI and inject.dart.
+  injectable: ^2.3.2
+
+  # Automatically generate code for converting to and from JSON by annotating Dart classes.
+  json_serializable: ^6.6.1
+
+  # Classes and helper functions that support JSON code generation via the `json_serializable` package.
+  json_annotation: ^4.8.1
+
+    # Keyboard visibility / (auto-) dismiss package without the need of native plugin
+  keyboard_service: ^2.0.2
+
+  # Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App"
+  get_it: ^7.6.0
+
+    # Flutter plugin for reading and writing simple key-value pairs. Wraps NSUserDefaults on iOS and SharedPreferences on Android.
+  shared_preferences: ^2.2.0
+
+  # Flutter Secure Storage provides API to store data in secure storage. Keychain is used in iOS, KeyStore based solution is used in Android.
+  flutter_secure_storage: ^8.0.0
+
+  # A simple Event Bus using Dart Streams for decoupling applications
+  event_bus: ^2.0.0
+
+  # A Dart package that helps to implement value based equality without needing to explicitly override == and hashCode.
+  equatable: ^2.0.5
+
+  # Annotation for generating `copyWith` extensions code using `copy_with_extension_gen`.
+  copy_with_extension: ^5.0.0
+
+  # The EasyRichText widget provides an easy way to use RichText. You do not have to split the string manually.
+  easy_rich_text: ^2.1.0
+
+  # Tap debounce simplifying widget. Wrap your button widget in TapDebounce widget and any taps will be disabled while tap callback is in progress.
+  tap_debouncer: ^2.0.2
+
+  # Toast Library for Flutter, Easily create toast messages in single line of code
+  fluttertoast: ^8.1.2
+
+  # Flutter library to load and cache network images. Can also be used with placeholder and error widgets.
+  cached_network_image: ^3.2.3
+
+  # Collections and utilities functions and classes related to collections.
+  collection: ^1.17.1
+
+  # Enhanced GetX for Flutter: Stability, Performance, Beginner-Friendly.
+  refreshed: ^1.5.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^3.0.1
+
+  # A build system for Dart code generation and modular compilation.
+  build_runner: ^2.3.3
+
+  # Injectable is a convenient code generator for get_it. Inspired by Angular DI, Guice DI and inject.dart.
+  injectable_generator: ^2.4.2
+
+  # The Flutter code generator for your assets, fonts, colors, … — Get rid of all String-based APIs.
+  flutter_gen_runner: ^5.3.1
+
+  # Checks for missing, under-promoted, over-promoted, and unused dependencies.
+  dependency_validator: ^3.2.2
+
+  # Software analytics tool that helps developers analyse and improve software quality.
+  dart_code_metrics: ^5.7.5
+
+  # Automatically generating `copyWith` extensions code for classes with `@CopyWith()` annotation.
+  copy_with_extension_gen: ^5.0.4
+
+flutter_gen:
+  output: lib/gen/
+  line_length: 150
+
+flutter:
+  uses-material-design: true
+  assets:
+    - resources/langs/
+    - resources/images/
+    - resources/icons/
+
+
