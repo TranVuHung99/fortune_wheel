@@ -40,7 +40,7 @@ dependencies:
   # Classes and helper functions that support JSON code generation via the `json_serializable` package.
   json_annotation: ^4.8.1
 
-    # Keyboard visibility / (auto-) dismiss package without the need of native plugin
+  # Keyboard visibility / (auto-) dismiss package without the need of native plugin
   keyboard_service: ^2.0.2
 
   # Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App"
@@ -79,6 +79,18 @@ dependencies:
   # Enhanced GetX for Flutter: Stability, Performance, Beginner-Friendly.
   refreshed: ^1.5.4
 
+  # Easy and Fast internationalizing and localization your Flutter Apps, this package simplify the internationalizing process
+  easy_localization: ^3.0.5
+
+  # Small, easy to use and extensible logger which prints beautiful logs.
+  logger: ^1.1.0
+
+  # A package to include fonts from fonts.google.com in your Flutter app.
+  google_fonts: ^6.1.0
+
+  # Visualize (random) selection processes with widgets like a spinning wheel of fortune or a fortune bar.
+  flutter_fortune_wheel: ^1.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -101,9 +113,6 @@ dev_dependencies:
 
   # Checks for missing, under-promoted, over-promoted, and unused dependencies.
   dependency_validator: ^3.2.2
-
-  # Software analytics tool that helps developers analyse and improve software quality.
-  dart_code_metrics: ^5.7.5
 
   # Automatically generating `copyWith` extensions code for classes with `@CopyWith()` annotation.
   copy_with_extension_gen: ^5.0.4
