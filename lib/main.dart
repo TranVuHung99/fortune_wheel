@@ -1,15 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lucid_decision/go_router_config.dart';
+import 'package:lucid_decision/modules/home/app/ui/history/history_wheel_page.dart';
 import 'package:lucid_decision/injector.dart';
 import 'package:lucid_decision/theme/ui_theme.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await EasyLocalization.ensureInitialized();
-  await setupInjector();
+  await configureDependencies();
+  setupEasyLoading();
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('vi')],
@@ -43,4 +47,16 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+void setupEasyLoading() {
+  EasyLoading.instance
+    ..indicatorType = EasyLoadingIndicatorType.ring
+    ..maskType = EasyLoadingMaskType.black
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..backgroundColor = Colors.white
+    ..indicatorColor = Colors.black
+    ..progressColor = Colors.black
+    ..userInteractions = false
+    ..textColor = Colors.black;
 }

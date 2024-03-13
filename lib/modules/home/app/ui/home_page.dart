@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucid_decision/core/extensions/string_ext.dart';
 import 'package:lucid_decision/locale_keys.g.dart';
+import 'package:lucid_decision/modules/home/app/ui/history/history_wheel_page.dart';
 import 'package:lucid_decision/modules/home/app/ui/home_page_view_model.dart';
 import 'package:lucid_decision/theme/ui_text_style.dart';
 import 'package:refreshed/get_state_manager/get_state_manager.dart';
@@ -34,6 +36,16 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
               },
               child: Icon(
                 Icons.add,
+                size: 24.sp,
+                color: Colors.black,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                context.pushNamed(HistoryWheelPage.routeName);
+              },
+              child: Icon(
+                Icons.access_time_outlined,
                 size: 24.sp,
                 color: Colors.black,
               ),
