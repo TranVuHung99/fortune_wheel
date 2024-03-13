@@ -4,9 +4,9 @@ import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:suga_core/suga_core.dart';
 
 abstract class WheelDatasource {
-  Future<List<Wheel>> getAllWheels();
-  Future<Unit> addWheel({required Wheel wheel});
-  Future<Unit> editWheel(int id, {required Wheel editWheel});
+  Future<List<WheelModel>> getAllWheels();
+  Future<Unit> addWheel({required WheelModel wheel});
+  Future<Unit> editWheel(int id, {required WheelModel editWheel});
   Future<Unit> deleteWheel(int id);
 }
 
@@ -17,8 +17,8 @@ class ImplLocalWheelDataSource implements WheelDatasource {
   ImplLocalWheelDataSource(this._service);
 
   @override
-  Future<Unit> addWheel({required Wheel wheel}) {
-    return _service.addWheel(wheel: wheel);
+  Future<Unit> addWheel({required WheelModel wheel}) {
+    return _service.addWheel(wheel: wheel.formatToEntity());
   }
 
   @override
@@ -27,12 +27,12 @@ class ImplLocalWheelDataSource implements WheelDatasource {
   }
 
   @override
-  Future<Unit> editWheel(int id, {required Wheel editWheel}) {
-    return _service.editWheel(id, editWheel: editWheel);
+  Future<Unit> editWheel(int id, {required WheelModel editWheel}) {
+    return _service.editWheel(id, editWheel: editWheel.formatToEntity());
   }
 
   @override
-  Future<List<Wheel>> getAllWheels() async {
+  Future<List<WheelModel>> getAllWheels() async {
     return _service.getAllWheels();
   }
 

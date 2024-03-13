@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lucid_decision/configs/app_config.dart';
 import 'package:lucid_decision/core/constants/constants.dart';
-import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
+import 'package:lucid_decision/modules/main/domain/models/wheel_entity.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 import 'package:suga_core/suga_core.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -30,7 +30,7 @@ abstract class MainModule {
     final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
     Hive.init(appDocumentDirectory.path);
     Hive.registerAdapter(WheelOptionAdapter());
-    Hive.registerAdapter(WheelAdapter());
+    Hive.registerAdapter(WheelEntityAdapter());
     return Hive.openBox(Constants.appHiveDatasource,);
   }
 }
