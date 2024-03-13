@@ -9,6 +9,6 @@ class AddWheelUsecase extends Usecase {
 
   const AddWheelUsecase(this._repository);
 
-  Future<Unit> run(Wheel wheel) =>
+  Future<Unit> run(WheelModel wheel) =>
       _repository.addWheel(wheel: wheel);
 }

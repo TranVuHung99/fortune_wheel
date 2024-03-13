@@ -9,6 +9,6 @@ class GetAllWheelUsecase extends Usecase {
 
   const GetAllWheelUsecase(this._repository);
 
-  Future<List<Wheel>> run() =>
+  Future<List<WheelModel>> run() =>
       _repository.getAllWheels();
 }

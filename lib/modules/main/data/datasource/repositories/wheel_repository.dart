@@ -8,7 +8,7 @@ class WheelRepository extends Repository {
   final WheelDatasource _datasource;
   const WheelRepository(this._datasource);
 
-  Future<Unit> addWheel({required Wheel wheel}) {
+  Future<Unit> addWheel({required WheelModel wheel}) {
     return _datasource.addWheel(wheel: wheel);
   }
 
@@ -16,11 +16,11 @@ class WheelRepository extends Repository {
     return _datasource.deleteWheel(id);
   }
 
-  Future<Unit> editWheel(int id, {required Wheel editWheel}) {
+  Future<Unit> editWheel(int id, {required WheelModel editWheel}) {
     return _datasource.editWheel(id, editWheel: editWheel);
   }
 
-  Future<List<Wheel>> getAllWheels() async {
+  Future<List<WheelModel>> getAllWheels() async {
     return _datasource.getAllWheels();
   }
 }
