@@ -103,6 +103,9 @@ dependencies:
   # RxDart is an implementation of the popular reactiveX api for asynchronous programming, leveraging the native Dart Streams api.
   rxdart: ^0.27.7
 
+  # A customizable Flutter primary, accent and custom color picker. Includes an optional HSV wheel color picker.
+  flex_color_picker: ^3.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
