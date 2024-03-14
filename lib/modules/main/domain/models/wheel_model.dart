@@ -1,4 +1,3 @@
-
 import 'package:lucid_decision/modules/main/domain/models/wheel_entity.dart';
 
 class WheelModel extends WheelEntity {
