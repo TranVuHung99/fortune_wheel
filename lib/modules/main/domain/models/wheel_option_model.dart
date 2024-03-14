@@ -1,5 +1,5 @@
-
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -8,7 +8,7 @@ part 'wheel_option_model.g.dart';
 @JsonSerializable()
 @CopyWith()
 @HiveType(typeId: 1)
-class WheelOption extends HiveObject {
+class WheelOption extends HiveObject implements Equatable {
   @HiveField(0)
   @JsonKey(name: "content")
   final String content;
@@ -18,9 +18,13 @@ class WheelOption extends HiveObject {
 
   WheelOption({required this.content, required this.color});
 
-
   factory WheelOption.fromJson(Map<String, dynamic> json) => _$WheelOptionFromJson(json);
 
   Map<String, dynamic> toJson() => _$WheelOptionToJson(this);
 
+  @override
+  List<Object?> get props => [color];
+
+  @override
+  bool? get stringify => null;
 }

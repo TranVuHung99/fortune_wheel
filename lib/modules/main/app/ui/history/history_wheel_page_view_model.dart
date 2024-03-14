@@ -18,7 +18,7 @@ class HistoryWheelPageViewModel extends AppViewModel {
     this._deleteWheelUsecase,
   );
 
-  final  _listWheels =  RxList<WheelModel>([]);
+  final _listWheels = RxList<WheelModel>([]);
 
   List<WheelModel> get getListWheels => _listWheels.toList();
 
@@ -40,6 +40,7 @@ class HistoryWheelPageViewModel extends AppViewModel {
     await showLoading();
     await run(() async {
       final data = await _getAllWheelUsecase.run();
+      print(data.map((e) => e.toJson()));
       _listWheels.assignAll(data);
     });
     await hideLoading();
@@ -49,7 +50,7 @@ class HistoryWheelPageViewModel extends AppViewModel {
   Future<Unit> deleteWheel(int id) async {
     await showLoading();
     await run(() async {
-      final data = await _deleteWheelUsecase.run(id);
+      await _deleteWheelUsecase.run(id);
     });
     await hideLoading();
     return unit;

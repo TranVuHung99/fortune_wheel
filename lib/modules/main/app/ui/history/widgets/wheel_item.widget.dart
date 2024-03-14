@@ -5,9 +5,10 @@ import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 
 class WheelItemWidget extends StatelessWidget {
   final Function() onDelete;
+  final Function() onEdit;
   final WheelModel wheel;
 
-  const WheelItemWidget({super.key, required this.wheel, required this.onDelete});
+  const WheelItemWidget({super.key, required this.wheel, required this.onDelete, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +39,21 @@ class WheelItemWidget extends StatelessWidget {
             )
           ])),
           GestureDetector(
-            onTap: () {
-              /// Navigate to add page with wheel param
-            },
-            child: const Icon(Icons.edit, color: Colors.black,),
+            onTap: onEdit,
+            child: const Icon(
+              Icons.edit,
+              color: Colors.black,
+            ),
           ),
-          SizedBox(width: 15.w,),
+          SizedBox(
+            width: 15.w,
+          ),
           GestureDetector(
             onTap: onDelete,
-            child: const Icon(Icons.delete, color: Colors.black,),
+            child: const Icon(
+              Icons.delete,
+              color: Colors.black,
+            ),
           )
         ],
       ),

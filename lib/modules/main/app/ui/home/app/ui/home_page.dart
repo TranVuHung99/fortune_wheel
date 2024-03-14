@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucid_decision/core/extensions/string_ext.dart';
 import 'package:lucid_decision/go_router_config.dart';
 import 'package:lucid_decision/locale_keys.g.dart';
 import 'package:lucid_decision/modules/main/app/ui/history/history_wheel_page.dart';
 import 'package:lucid_decision/modules/main/app/ui/home/app/ui/home_page_view_model.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_customize_page.dart';
 import 'package:lucid_decision/theme/ui_text_style.dart';
 import 'package:refreshed/refreshed.dart';
 import 'package:suga_core/suga_core.dart';
@@ -194,7 +196,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
           ),
         ),
         floatingActionButton: GestureDetector(
-          onTap: () {},
+          onTap: () => context.goNamed(WheelCustomizePage.routeName),
           child: Container(
             alignment: Alignment.center,
             width: 60.w,

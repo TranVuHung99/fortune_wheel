@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucid_decision/injector.dart';
 import 'package:lucid_decision/modules/main/app/ui/history/history_wheel_page_view_model.dart';
 import 'package:lucid_decision/modules/main/app/ui/history/widgets/wheel_item.widget.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_customize_page.dart';
 import 'package:refreshed/get_state_manager/get_state_manager.dart';
 import 'package:suga_core/suga_core.dart';
 
@@ -30,7 +32,9 @@ class _HistoryWheelState extends BaseViewState<HistoryWheelPage, HistoryWheelPag
         actions: [
           IconButton(
               onPressed: () {
-                /// Navigate to add page without wheel param
+                context.goNamed(
+                  WheelCustomizePage.routeName,
+                );
               },
               icon: const Icon(
                 Icons.add,
@@ -49,6 +53,7 @@ class _HistoryWheelState extends BaseViewState<HistoryWheelPage, HistoryWheelPag
                     onDelete: () {
                       viewModel.deleteWheel(id);
                     },
+                    onEdit: () => context.pushNamed(WheelCustomizePage.routeName, extra: viewModel.getListWheels[id]),
                   ),
                   itemCount: viewModel.getListWheels.length,
                 ),
