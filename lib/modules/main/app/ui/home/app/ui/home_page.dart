@@ -154,7 +154,6 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                     Visibility(
                       visible: !viewModel.isShowResult,
                       child: Container(
-                        height: 40.h,
                         constraints: BoxConstraints(
                           maxWidth: 300.w,
                           maxHeight: 200.h,
@@ -176,7 +175,6 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                     Visibility(
                       visible: !viewModel.isShowResult,
                       child: Container(
-                        height: 40.h,
                         constraints: BoxConstraints(
                           maxWidth: 300.w,
                           maxHeight: 200.h,
