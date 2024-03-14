@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lucid_decision/injector.dart';
+import 'package:lucid_decision/modules/helpers/position_retained_scroll_physics.dart';
 import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_customize_page_view_model.dart';
 import 'package:lucid_decision/modules/main/app/ui/wheel_customize/widgets/wheel_slice_item_widget.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
@@ -66,16 +67,20 @@ class _WheelCustomizePageState extends BaseViewState<WheelCustomizePage, WheelCu
           ),
           Expanded(
             child: Obx(
-              () => ListView.builder(
-                key: Key(viewModel.wheelOptions.length.toString()),
-                shrinkWrap: true,
-                itemBuilder: (context, index) => WheelSliceItemWidget(
-                  wheelOption: viewModel.wheelOptions.elementAt(index),
-                  onDeleteSlice: () => viewModel.onDeleteSlice(index),
-                  onChooseColor: () => viewModel.onChooseColor(index, context),
-                  onEditingText: (content) => viewModel.onEditingContent(content, index),
-                ),
-                itemCount: viewModel.wheelOptions.length,
+              () => CustomScrollView(
+                physics: const PositionRetainedScrollPhysics(),
+                slivers: [
+                  SliverList.builder(
+                    key: Key(viewModel.wheelOptions.length.toString()),
+                    itemCount: viewModel.wheelOptions.length,
+                    itemBuilder: (context, index) => WheelSliceItemWidget(
+                      wheelOption: viewModel.wheelOptions.elementAt(index),
+                      onDeleteSlice: () => viewModel.onDeleteSlice(index),
+                      onChooseColor: () => viewModel.onChooseColor(index, context),
+                      onEditingText: (content) => viewModel.onEditingContent(content, index),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
