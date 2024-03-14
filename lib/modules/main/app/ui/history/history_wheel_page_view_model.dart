@@ -40,7 +40,6 @@ class HistoryWheelPageViewModel extends AppViewModel {
     await showLoading();
     await run(() async {
       final data = await _getAllWheelUsecase.run();
-      print(data.map((e) => e.toJson()));
       _listWheels.assignAll(data);
     });
     await hideLoading();

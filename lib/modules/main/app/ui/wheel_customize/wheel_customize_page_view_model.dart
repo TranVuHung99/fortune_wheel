@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lucid_decision/core/abtracts/app_view_model.dart';
 import 'package:lucid_decision/go_router_config.dart';
@@ -11,7 +10,7 @@ import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/add_wheel_usecase.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/edit_wheel_usecase.dart';
-import 'package:refreshed/get_rx/get_rx.dart';
+import 'package:refreshed/refreshed.dart';
 
 import 'package:suga_core/suga_core.dart';
 

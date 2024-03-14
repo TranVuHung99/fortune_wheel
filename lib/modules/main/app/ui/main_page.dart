@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lucid_decision/injector.dart';
 import 'package:lucid_decision/modules/main/app/ui/helpers/tab_bar_helper.dart';
 import 'package:lucid_decision/modules/main/app/ui/main_page_view_model.dart';
 import 'package:lucid_decision/modules/main/app/ui/home/app/ui/home_page.dart';
@@ -69,5 +70,5 @@ class _MainPageState extends BaseViewState<MainPage, MainPageViewModel> with Tic
   }
 
   @override
-  MainPageViewModel createViewModel() => MainPageViewModel();
+  MainPageViewModel createViewModel() => injector<MainPageViewModel>();
 }

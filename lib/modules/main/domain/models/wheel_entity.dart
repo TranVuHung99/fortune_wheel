@@ -9,7 +9,7 @@ part 'wheel_entity.g.dart';
 @JsonSerializable()
 @CopyWith()
 @HiveType(typeId: 0)
-class WheelEntity extends HiveObject{
+class WheelEntity extends HiveObject {
   @JsonKey(name: "name")
   @HiveField(0)
   final String name;
@@ -27,7 +27,7 @@ class WheelEntity extends HiveObject{
     required this.createdAt,
     required this.updateAt,
     required this.options,
-});
+  });
 
   factory WheelEntity.fromJson(Map<String, dynamic> json) => _$WheelEntityFromJson(json);
 
@@ -36,6 +36,4 @@ class WheelEntity extends HiveObject{
   static List<Map<String, dynamic>> _optionsToJson(List<WheelOption> wheelOptions) => wheelOptions.map((option) => option.toJson()).toList();
 
   WheelModel formatToModel(int id) => WheelModel(id, name: name, createdAt: createdAt, updateAt: updateAt, options: options);
-
-
 }
