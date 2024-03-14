@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_slice_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 
 class WheelSliceItemWidget extends StatefulWidget {
-  final WheelSliceModel wheelSliceModel;
+  final WheelOption wheelOption;
   final VoidCallback onDeleteSlice;
   final VoidCallback onChooseColor;
+  final Function(String) onEditingText;
 
   const WheelSliceItemWidget({
     super.key,
-    required this.wheelSliceModel,
+    required this.wheelOption,
     required this.onDeleteSlice,
     required this.onChooseColor,
+    required this.onEditingText,
   });
 
   @override
@@ -23,14 +26,14 @@ class _WheelSliceItemWidgetState extends State<WheelSliceItemWidget> {
   @override
   void initState() {
     super.initState();
-    _textEditingController.text = widget.wheelSliceModel.sliceName;
+    _textEditingController.text = widget.wheelOption.content;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 21),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 13),
+      margin: EdgeInsets.only(bottom: 21.h),
+      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 13.w),
       color: Colors.grey.shade300,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,16 +41,16 @@ class _WheelSliceItemWidgetState extends State<WheelSliceItemWidget> {
           GestureDetector(
             onTap: widget.onChooseColor,
             child: Container(
-              width: 40,
-              height: 40,
+              width: 40.w,
+              height: 40.h,
               decoration: BoxDecoration(
-                color: widget.wheelSliceModel.color,
+                color: Color(widget.wheelOption.color),
                 shape: BoxShape.circle,
               ),
             ),
           ),
-          const SizedBox(
-            width: 35,
+          SizedBox(
+            width: 35.w,
           ),
           Expanded(
             child: TextField(
@@ -56,19 +59,20 @@ class _WheelSliceItemWidgetState extends State<WheelSliceItemWidget> {
                 border: InputBorder.none,
               ),
               controller: _textEditingController,
+              onChanged: widget.onEditingText,
             ),
           ),
-          const SizedBox(
-            width: 41,
+          SizedBox(
+            width: 41.w,
           ),
           GestureDetector(
             onTap: widget.onDeleteSlice,
             child: Container(
-              width: 38,
-              height: 38,
+              width: 38.w,
+              height: 38.h,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.red, width: 3),
+                border: Border.all(color: Colors.red, width: 3.sp),
               ),
               child: const Icon(
                 Icons.remove,

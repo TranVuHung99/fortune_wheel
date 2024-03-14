@@ -1,19 +1,30 @@
-import 'dart:math';
-
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_slice_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lucid_decision/injector.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_customize_page_view_model.dart';
 import 'package:lucid_decision/modules/main/app/ui/wheel_customize/widgets/wheel_slice_item_widget.dart';
+import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
+import 'package:refreshed/get_state_manager/get_state_manager.dart';
+import 'package:suga_core/suga_core.dart';
 
 class WheelCustomizePage extends StatefulWidget {
-  const WheelCustomizePage({super.key});
+  static String routeName = 'WheelCustomizePage';
+  final WheelModel? wheel;
+  const WheelCustomizePage({super.key, this.wheel});
 
   @override
   State<WheelCustomizePage> createState() => _WheelCustomizePageState();
 }
 
-class _WheelCustomizePageState extends State<WheelCustomizePage> {
-  List<WheelSliceModel> wheelSlices = [];
+class _WheelCustomizePageState extends BaseViewState<WheelCustomizePage, WheelCustomizePageViewModel> {
+  @override
+  WheelCustomizePageViewModel createViewModel() => injector<WheelCustomizePageViewModel>();
+
+  @override
+  void loadArguments() {
+    viewModel.loadArguments(widget.wheel);
+    super.loadArguments();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +33,10 @@ class _WheelCustomizePageState extends State<WheelCustomizePage> {
         backgroundColor: Colors.white,
         actions: [
           GestureDetector(
-            onTap: () => addWheelSlice(Color(Random().nextInt(0xffffffff)), ""),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 15),
-              child: Icon(Icons.add),
+            onTap: () => viewModel.addWheelSlice(),
+            child: Padding(
+              padding: EdgeInsets.only(right: 15.w),
+              child: const Icon(Icons.add),
             ),
           ),
         ],
@@ -34,41 +45,61 @@ class _WheelCustomizePageState extends State<WheelCustomizePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            margin: EdgeInsets.symmetric(horizontal: 99.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(10.r),
               border: Border.all(color: Colors.black, width: 2),
             ),
-            child: const Text("What should i do today?"),
+            child: TextField(
+              decoration: const InputDecoration(
+                hintText: "What should i do today?",
+                border: InputBorder.none,
+              ),
+              controller: viewModel.textEditingController,
+              onChanged: viewModel.onEditingTitle,
+            ),
           ),
-          const SizedBox(
-            height: 27,
+          SizedBox(
+            height: 27.h,
           ),
           Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, index) => WheelSliceItemWidget(
-                wheelSliceModel: wheelSlices.elementAt(index),
-                onDeleteSlice: () => onDeleteSlice(index),
-                onChooseColor: () => onChooseColor(wheelSlices.elementAt(index)),
+            child: Obx(
+              () => ListView.builder(
+                key: Key(viewModel.wheelOptions.length.toString()),
+                shrinkWrap: true,
+                itemBuilder: (context, index) => WheelSliceItemWidget(
+                  wheelOption: viewModel.wheelOptions.elementAt(index),
+                  onDeleteSlice: () => viewModel.onDeleteSlice(index),
+                  onChooseColor: () => viewModel.onChooseColor(index, context),
+                  onEditingText: (content) => viewModel.onEditingContent(content, index),
+                ),
+                itemCount: viewModel.wheelOptions.length,
               ),
-              itemCount: wheelSlices.length,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 27),
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-            ),
-            child: const Center(
-              child: Text(
-                "DONE",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
+          Obx(
+            () => Visibility(
+              visible: viewModel.isCouldSubmit,
+              child: GestureDetector(
+                onTap: () => widget.wheel != null ? viewModel.onEditWheel(widget.wheel!) : viewModel.onAddWheel(),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 27.h),
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "DONE",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -76,45 +107,5 @@ class _WheelCustomizePageState extends State<WheelCustomizePage> {
         ],
       ),
     );
-  }
-
-  void addWheelSlice(Color color, String sliceName) {
-    setState(() {
-      wheelSlices.add(WheelSliceModel(color: color, sliceName: sliceName));
-    });
-  }
-
-  void onDeleteSlice(index) {
-    setState(() {
-      wheelSlices.removeAt(index);
-    });
-  }
-
-  onChooseColor(WheelSliceModel wheelSliceModel) async {
-    final Color newColor = await showColorPickerDialog(
-      context,
-      wheelSliceModel.color,
-      title: Text('ColorPicker', style: Theme.of(context).textTheme.titleLarge),
-      width: 40,
-      height: 40,
-      spacing: 0,
-      runSpacing: 0,
-      borderRadius: 0,
-      wheelDiameter: 165,
-      enableOpacity: true,
-      colorCodeHasColor: true,
-      pickersEnabled: <ColorPickerType, bool>{
-        ColorPickerType.wheel: true,
-      },
-      actionButtons: const ColorPickerActionButtons(
-        okButton: true,
-        closeButton: true,
-        dialogActionButtons: false,
-      ),
-      constraints: const BoxConstraints(minHeight: 480, minWidth: 320, maxWidth: 480),
-    );
-    setState(() {
-      wheelSliceModel.color = newColor;
-    });
   }
 }
