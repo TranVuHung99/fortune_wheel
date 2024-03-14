@@ -46,7 +46,10 @@ final GoRouter goRouterConfig = GoRouter(
           name: WheelCustomizePage.routeName,
           path: WheelCustomizePage.routeName,
           builder: (BuildContext context, GoRouterState state) {
-            return WheelCustomizePage(wheel: state.extra as WheelModel?);
+            return WheelCustomizePage(
+              wheel: state.extra as WheelModel?,
+              isAddNewWheel: state.uri.queryParameters["isAddNewWheel"] == "true",
+            );
           },
         ),
       ],

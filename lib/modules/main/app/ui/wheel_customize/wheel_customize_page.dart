@@ -10,7 +10,8 @@ import 'package:suga_core/suga_core.dart';
 class WheelCustomizePage extends StatefulWidget {
   static String routeName = 'WheelCustomizePage';
   final WheelModel? wheel;
-  const WheelCustomizePage({super.key, this.wheel});
+  final bool isAddNewWheel;
+  const WheelCustomizePage({super.key, this.wheel, required this.isAddNewWheel});
 
   @override
   State<WheelCustomizePage> createState() => _WheelCustomizePageState();
@@ -22,7 +23,7 @@ class _WheelCustomizePageState extends BaseViewState<WheelCustomizePage, WheelCu
 
   @override
   void loadArguments() {
-    viewModel.loadArguments(widget.wheel);
+    viewModel.loadArguments(widget.wheel, widget.isAddNewWheel);
     super.loadArguments();
   }
 

@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lucid_decision/core/abtracts/app_view_model.dart';
 import 'package:lucid_decision/go_router_config.dart';
+import 'package:lucid_decision/modules/main/domain/models/wheel_entity.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/add_wheel_usecase.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/edit_wheel_usecase.dart';
-import 'package:refreshed/refreshed.dart';
+import 'package:refreshed/get_rx/get_rx.dart';
 
 import 'package:suga_core/suga_core.dart';
 
@@ -39,12 +40,15 @@ class WheelCustomizePageViewModel extends AppViewModel {
 
   String get wheelName => _wheelName.value;
 
-  Future<Unit> loadArguments(WheelModel? wheel) async {
+  Future<Unit> loadArguments(WheelModel? wheel, bool isAddNewWheel) async {
     if (wheel != null && wheel.options.isNotEmpty && isFirstLoaded) {
       _wheelOptions.assignAll(wheel.options);
       _wheelName(wheel.name);
       textEditingController.text = wheel.name;
     } else {
+      if (isAddNewWheel && isFirstLoaded) {
+        addRandomInitWheel(2);
+      }
       _isInputWheelEmpty(true);
     }
     isFirstLoaded = false;
@@ -63,6 +67,7 @@ class WheelCustomizePageViewModel extends AppViewModel {
 
   Unit onEditingContent(String content, int index) {
     _wheelOptions[index] = _wheelOptions[index].copyWith(content: content);
+
     return unit;
   }
 
@@ -92,14 +97,16 @@ class WheelCustomizePageViewModel extends AppViewModel {
 
   Future<Unit> onEditWheel(WheelModel wheel) async {
     await showLoading();
+    WheelModel newWheel = wheel.copyWith(options: _wheelOptions).formatToModel(wheel.id);
     await run(
       () async {
         await _editWheelUsecase.run(
           wheel.id,
-          wheel: wheel,
+          wheel: newWheel,
         );
       },
     );
+    goRouterConfig.pop();
     await hideLoading();
     return unit;
   }
@@ -128,5 +135,11 @@ class WheelCustomizePageViewModel extends AppViewModel {
       constraints: const BoxConstraints(minHeight: 480, minWidth: 320, maxWidth: 480),
     );
     _wheelOptions[index] = _wheelOptions[index].copyWith(color: newColor.value);
+  }
+
+  void addRandomInitWheel(int times) {
+    do {
+      _wheelOptions.add(WheelOption(color: Random().nextInt(0xffffffff), content: ""));
+    } while (_wheelOptions.length < times);
   }
 }

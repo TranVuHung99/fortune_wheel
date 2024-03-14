@@ -10,7 +10,6 @@ class WheelHiveService {
   final Box collection;
   WheelHiveService(this.collection);
 
-
   Future<List<WheelModel>> getAllWheels() async {
     final values = collection.values.cast<WheelEntity>().toList();
     final keys = collection.keys.toList();
