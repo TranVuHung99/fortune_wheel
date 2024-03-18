@@ -4,13 +4,18 @@ import 'package:lucid_decision/injector.dart';
 import 'package:lucid_decision/modules/main/app/ui/helpers/tab_bar_helper.dart';
 import 'package:lucid_decision/modules/main/app/ui/main_page_view_model.dart';
 import 'package:lucid_decision/modules/main/app/ui/home/app/ui/home_page.dart';
+import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:refreshed/refreshed.dart';
 import 'package:suga_core/suga_core.dart';
 
 class MainPage extends StatefulWidget {
   static String routeName = 'MainPage';
+  final WheelModel? wheel;
 
-  const MainPage({super.key});
+  const MainPage({
+    super.key,
+    this.wheel,
+  });
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -33,9 +38,9 @@ class _MainPageState extends BaseViewState<MainPage, MainPageViewModel> with Tic
           body: TabBarView(
             controller: viewModel.tabController,
             physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              HomePage(),
-              SizedBox() // Setting Page
+            children: [
+              HomePage(wheel: widget.wheel),
+              const SizedBox() // Setting Page
             ],
           ),
           bottomNavigationBar: Obx(

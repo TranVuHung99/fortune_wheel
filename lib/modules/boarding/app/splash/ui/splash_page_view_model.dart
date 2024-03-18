@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:lucid_decision/core/abtracts/app_view_model.dart';
+import 'package:lucid_decision/core/abstracts/app_view_model.dart';
 import 'package:lucid_decision/go_router_config.dart';
 import 'package:lucid_decision/modules/main/app/ui/main_page.dart';
 

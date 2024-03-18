@@ -25,14 +25,14 @@ final GoRouter goRouterConfig = GoRouter(
       name: MainPage.routeName,
       path: '/${MainPage.routeName}',
       builder: (BuildContext context, GoRouterState state) {
-        return const MainPage();
+        return MainPage(wheel: state.extra as WheelModel?);
       },
       routes: [
         GoRoute(
           name: HomePage.routeName,
           path: HomePage.routeName,
           builder: (BuildContext context, GoRouterState state) {
-            return const HomePage();
+            return HomePage(wheel: state.extra as WheelModel?);
           },
         ),
         GoRoute(
