@@ -9,55 +9,66 @@ import 'package:lucid_decision/locale_keys.g.dart';
 import 'package:lucid_decision/modules/main/app/ui/history/history_wheel_page.dart';
 import 'package:lucid_decision/modules/main/app/ui/home/app/ui/home_page_view_model.dart';
 import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_customize_page.dart';
+import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:lucid_decision/theme/ui_text_style.dart';
 import 'package:refreshed/refreshed.dart';
 import 'package:suga_core/suga_core.dart';
 
 class HomePage extends StatefulWidget {
   static String routeName = 'HomePage';
+  final WheelModel? wheel;
 
-  const HomePage({super.key});
+  const HomePage({
+    super.key,
+    this.wheel,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
+class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with AutomaticKeepAliveClientMixin {
+  @override
+  void loadArguments() {
+    viewModel.loadArguments(widget.wheel);
+    super.loadArguments();
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: Obx(
-        () => viewModel.currentWheel == null
-            ? Container()
-            : Scaffold(
-                appBar: AppBar(
-                  primary: false,
-                  elevation: 0.0,
-                  backgroundColor: Colors.white,
-                  automaticallyImplyLeading: false,
-                  actions: [
-                    GestureDetector(
-                      onTap: () => goRouterConfig.pushNamed(HistoryWheelPage.routeName),
-                      child: Icon(
-                        Icons.history,
-                        size: 24.sp,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(width: 15.w),
-                    GestureDetector(
-                      onTap: () => context.goNamed(WheelCustomizePage.routeName),
-                      child: Icon(
-                        Icons.add,
-                        size: 24.sp,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(width: 15.w),
-                  ],
+        () => Scaffold(
+          appBar: AppBar(
+            primary: false,
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            actions: [
+              GestureDetector(
+                onTap: () => goRouterConfig.pushNamed(HistoryWheelPage.routeName),
+                child: Icon(
+                  Icons.history,
+                  size: 24.sp,
+                  color: Colors.black,
                 ),
-                backgroundColor: Colors.white,
-                body: Column(
+              ),
+              SizedBox(width: 15.w),
+              GestureDetector(
+                onTap: () => context.goNamed(WheelCustomizePage.routeName),
+                child: Icon(
+                  Icons.add,
+                  size: 24.sp,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(width: 15.w),
+            ],
+          ),
+          backgroundColor: Colors.white,
+          body: viewModel.currentWheel != null
+              ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 40.h),
@@ -105,15 +116,15 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                               ),
                             ],
                             items: [
-                              for (var wheelOption in viewModel.currentWheel!.options)
+                              for (final option in viewModel.currentWheel!.options)
                                 FortuneItem(
                                   child: Container(
                                     constraints: BoxConstraints(maxHeight: 50.h),
                                     margin: EdgeInsets.only(left: 50.w, right: 5.w),
-                                    child: Text(wheelOption.content),
+                                    child: Text(option.content),
                                   ),
                                   style: FortuneItemStyle(
-                                    color: Color(wheelOption.color),
+                                    color: Color(option.color),
                                     borderColor: Colors.white,
                                     textAlign: TextAlign.start,
                                     textStyle: UITextStyle.black_18_bold,
@@ -122,10 +133,10 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                             ],
                             onAnimationEnd: () {
                               viewModel.setResultLabel = viewModel.currentWheel!.options[viewModel.streamController.value].content;
-                              viewModel.isShowResult = false;
+                              viewModel.isShowResult = true;
                             },
                             onAnimationStart: () {
-                              viewModel.isShowResult = true;
+                              viewModel.isShowResult = false;
                             },
                           ),
                         ),
@@ -152,7 +163,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                       ],
                     ),
                     Visibility(
-                      visible: !viewModel.isShowResult,
+                      visible: viewModel.isShowResult,
                       child: Container(
                         constraints: BoxConstraints(
                           maxWidth: 300.w,
@@ -173,7 +184,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                     ),
                     SizedBox(height: 8.h),
                     Visibility(
-                      visible: !viewModel.isShowResult,
+                      visible: viewModel.isShowResult,
                       child: Container(
                         constraints: BoxConstraints(
                           maxWidth: 300.w,
@@ -193,8 +204,11 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                       ),
                     ),
                   ],
-                ),
-                floatingActionButton: GestureDetector(
+                )
+              : Container(),
+          floatingActionButton: viewModel.currentWheel == null
+              ? Container()
+              : GestureDetector(
                   onTap: () => context.goNamed(WheelCustomizePage.routeName, extra: viewModel.currentWheel),
                   child: Container(
                     alignment: Alignment.center,
@@ -212,11 +226,14 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> {
                     ),
                   ),
                 ),
-              ),
+        ),
       ),
     );
   }
 
   @override
   HomePageViewModel createViewModel() => injector<HomePageViewModel>();
+
+  @override
+  bool get wantKeepAlive => true;
 }

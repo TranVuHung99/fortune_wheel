@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lucid_decision/core/abtracts/app_view_model.dart';
+import 'package:lucid_decision/core/abstracts/app_view_model.dart';
+import 'package:lucid_decision/modules/main/domain/events/on_add_wheel_event.dart';
+import 'package:lucid_decision/modules/main/domain/events/on_delete_wheel_event.dart';
+import 'package:lucid_decision/modules/main/domain/events/on_done_editing_wheel_event.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/add_wheel_usecase.dart';
@@ -15,10 +19,12 @@ import 'package:suga_core/suga_core.dart';
 class HomePageViewModel extends AppViewModel {
   final GetAllWheelUsecase _getAllWheelUsecase;
   final AddWheelUsecase _addWheelUsecase;
+  final EventBus _eventBus;
 
   HomePageViewModel(
     this._getAllWheelUsecase,
     this._addWheelUsecase,
+    this._eventBus,
   );
 
   Rx<int> streamController = 0.obs;
@@ -29,7 +35,7 @@ class HomePageViewModel extends AppViewModel {
 
   set setResultLabel(String value) => _resultLabel.value = value;
 
-  final RxBool _isShowResult = RxBool(true);
+  final RxBool _isShowResult = RxBool(false);
 
   bool get isShowResult => _isShowResult.value;
 
@@ -39,9 +45,11 @@ class HomePageViewModel extends AppViewModel {
 
   WheelModel? get currentWheel => _currentWheel.value;
 
-  final _wheels = RxList<WheelModel>([]);
+  StreamSubscription? _editWheelEventListener;
 
-  List<WheelModel> get wheels => _wheels.value;
+  StreamSubscription? _deleteWheelEventListener;
+
+  StreamSubscription? _addWheelEventListener;
 
   @override
   void initState() {
@@ -52,42 +60,63 @@ class HomePageViewModel extends AppViewModel {
   @override
   void disposeState() {
     streamController.close();
+    _editWheelEventListener?.cancel();
+    _addWheelEventListener?.cancel();
+    _deleteWheelEventListener?.cancel();
     super.disposeState();
   }
 
   Future<Unit> _loadData() async {
-    await _getAllWheel();
-    await _savedDefaultWheel();
+    _registerEvent();
+    await _getWheels();
     return unit;
   }
 
-  Future<Unit> _getAllWheel() async {
-    late List<WheelModel> fetchedWheels;
-    await showLoading();
-    final success = await run(
-      () async {
-        fetchedWheels = await _getAllWheelUsecase.run();
-      },
-    );
-    await hideLoading();
-    if (success) {
-      wheels.assignAll(fetchedWheels);
+  Future<Unit> loadArguments(WheelModel? wheel) async {
+    if (wheel != null) {
+      _currentWheel.value = wheel;
     }
     return unit;
   }
 
-  Future<Unit> _savedDefaultWheel() async {
-    if (wheels.isNotEmpty) {
-      _currentWheel.value = wheels.last;
+  Future<Unit> _getWheels({bool isAddDefaultWheel = true}) async {
+    await showLoading();
+    late List<WheelModel> fetchedWheels;
+    await run(() async => fetchedWheels = await _getAllWheelUsecase.run());
+    if (fetchedWheels.isNotEmpty) {
+      _currentWheel.value = fetchedWheels.last;
     } else {
-      final success = await run(() async {
-        await _addWheelUsecase.run(getDefaultWheel);
-      });
-      if (success) {
-        _currentWheel.value = getDefaultWheel;
+      if (isAddDefaultWheel) {
+        await _addDefaultWheel();
+      } else {
+        _currentWheel.value = null;
       }
     }
+    await hideLoading();
     return unit;
+  }
+
+  Future<Unit> _addDefaultWheel() async {
+    await run(() async {
+      await _addWheelUsecase.run(getDefaultWheel);
+      _currentWheel.value = getDefaultWheel;
+    });
+    return unit;
+  }
+
+  void _registerEvent() {
+    _editWheelEventListener = _eventBus.on<OnDoneEditingWheelEvent>().listen((event) {
+      _currentWheel.value = event.wheel;
+      _isShowResult.value = false;
+    });
+    _addWheelEventListener = _eventBus.on<OnAddWheelEvent>().listen((event) {
+      _currentWheel.value = event.wheel;
+      _isShowResult.value = false;
+    });
+    _deleteWheelEventListener = _eventBus.on<OnDeleteWheelEvent>().listen((event) {
+      Future.delayed(const Duration(milliseconds: 500));
+      _getWheels(isAddDefaultWheel: false);
+    });
   }
 
   WheelModel get getDefaultWheel => WheelModel(

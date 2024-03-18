@@ -4,14 +4,15 @@ import 'dart:math';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lucid_decision/core/abtracts/app_view_model.dart';
+import 'package:lucid_decision/core/abstracts/app_view_model.dart';
 import 'package:lucid_decision/go_router_config.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_entity.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/add_wheel_usecase.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/edit_wheel_usecase.dart';
-import 'package:refreshed/get_rx/get_rx.dart';
+import 'package:refreshed/refreshed.dart';
+import 'package:lucid_decision/core/extensions/context_ext.dart';
 
 import 'package:suga_core/suga_core.dart';
 
@@ -90,14 +91,15 @@ class WheelCustomizePageViewModel extends AppViewModel {
         await _addWheelUsecase.run(wheel);
       },
     );
-    goRouterConfig.pop();
+    goRouterConfig.routerDelegate.navigatorKey.currentContext?.hideKeyboard();
     await hideLoading();
+    goRouterConfig.pop();
     return unit;
   }
 
   Future<Unit> onEditWheel(WheelModel wheel) async {
     await showLoading();
-    WheelModel newWheel = wheel.copyWith(options: _wheelOptions).formatToModel(wheel.id);
+    WheelModel newWheel = wheel.copyWith(options: wheelOptions, name: wheelName).formatToModel(wheel.id);
     await run(
       () async {
         await _editWheelUsecase.run(
@@ -106,8 +108,9 @@ class WheelCustomizePageViewModel extends AppViewModel {
         );
       },
     );
-    goRouterConfig.pop();
+    goRouterConfig.routerDelegate.navigatorKey.currentContext?.hideKeyboard();
     await hideLoading();
+    goRouterConfig.pop();
     return unit;
   }
 

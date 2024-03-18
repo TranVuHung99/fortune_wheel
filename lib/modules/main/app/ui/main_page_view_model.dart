@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lucid_decision/core/abtracts/app_view_model.dart';
+import 'package:lucid_decision/core/abstracts/app_view_model.dart';
 import 'package:lucid_decision/modules/main/app/ui/helpers/tab_bar_helper.dart';
 import 'package:refreshed/get_rx/get_rx.dart';
 

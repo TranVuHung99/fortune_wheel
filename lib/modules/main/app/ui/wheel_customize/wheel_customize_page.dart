@@ -32,7 +32,6 @@ class _WheelCustomizePageState extends BaseViewState<WheelCustomizePage, WheelCu
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         actions: [
           GestureDetector(
             onTap: () => viewModel.addWheelSlice(),
