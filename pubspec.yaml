@@ -49,9 +49,6 @@ dependencies:
     # Flutter plugin for reading and writing simple key-value pairs. Wraps NSUserDefaults on iOS and SharedPreferences on Android.
   shared_preferences: ^2.2.0
 
-  # Flutter Secure Storage provides API to store data in secure storage. Keychain is used in iOS, KeyStore based solution is used in Android.
-  flutter_secure_storage: ^8.0.0
-
   # A simple Event Bus using Dart Streams for decoupling applications
   event_bus: ^2.0.0
 
