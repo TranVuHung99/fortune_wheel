@@ -9,6 +9,7 @@ import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dar
 import 'package:suga_core/suga_core.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:lucid_decision/injector.config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final injector = GetIt.instance;
 
@@ -20,6 +21,9 @@ Future<Unit> configureDependencies() async {
 
 @module
 abstract class MainModule {
+  @lazySingleton
+  @preResolve
+  Future<SharedPreferences> getSharePreferences() async => SharedPreferences.getInstance();
 
   @lazySingleton
   EventBus getEventBus() => EventBus();
@@ -31,6 +35,8 @@ abstract class MainModule {
     Hive.init(appDocumentDirectory.path);
     Hive.registerAdapter(WheelOptionAdapter());
     Hive.registerAdapter(WheelEntityAdapter());
-    return Hive.openBox(Constants.appHiveDatasource,);
+    return Hive.openBox(
+      Constants.appHiveDatasource,
+    );
   }
 }

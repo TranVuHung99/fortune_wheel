@@ -3,5 +3,21 @@
     "edit": "Edit",
     "start": "Start",
     "what_should_i_do_today": "What should i do today?",
-    "share": "Share"
+    "share": "Share",
+    "setting": "Setting",
+    "help": "Help",
+    "app_info": "App Info",
+    "language": "Language",
+    "spin_time": "Spin Time",
+    "lang_en": "English",
+    "lang_vi": "Vietnamese",
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "sec_3": "3s: Fastest",
+    "sec_5": "5s: Fast",
+    "sec_7": "7s: A little faster",
+    "sec_10": "10s: Normal",
+    "sec_12": "12s: A little slower",
+    "sec_15": "15s: Slow",
+    "sec_20": "20s: Slowest"
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucid_decision/modules/app_setting/app/ui/app_setting_page.dart';
 import 'package:lucid_decision/modules/boarding/app/splash/ui/splash_page.dart';
 import 'package:lucid_decision/modules/main/app/ui/history/history_wheel_page.dart';
 import 'package:lucid_decision/modules/main/app/ui/main_page.dart';
@@ -50,6 +51,13 @@ final GoRouter goRouterConfig = GoRouter(
               wheel: state.extra as WheelModel?,
               isAddNewWheel: state.uri.queryParameters["isAddNewWheel"] == "true",
             );
+          },
+        ),
+        GoRoute(
+          name: AppSettingPage.routeName,
+          path: AppSettingPage.routeName,
+          builder: (BuildContext context, GoRouterState state) {
+            return const AppSettingPage();
           },
         ),
       ],
