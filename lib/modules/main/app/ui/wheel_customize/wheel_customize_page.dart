@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucid_decision/injector.dart';
 import 'package:lucid_decision/modules/helpers/position_retained_scroll_physics.dart';
 import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_customize_page_view_model.dart';
@@ -87,7 +88,10 @@ class _WheelCustomizePageState extends BaseViewState<WheelCustomizePage, WheelCu
             () => Visibility(
               visible: viewModel.isCouldSubmit,
               child: GestureDetector(
-                onTap: () => widget.wheel != null ? viewModel.onEditWheel(widget.wheel!) : viewModel.onAddWheel(),
+                onTap: ()  {
+                  widget.wheel != null ? viewModel.onEditWheel(widget.wheel!) : viewModel.onAddWheel();
+                   context.pop();
+                },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 16.h),
                   margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 27.h),

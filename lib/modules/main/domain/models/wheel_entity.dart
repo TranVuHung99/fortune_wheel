@@ -22,11 +22,19 @@ class WheelEntity extends HiveObject {
   @JsonKey(name: "update_at")
   @HiveField(3)
   final DateTime updateAt;
+  @HiveField(4)
+  final String? banner;
+  @JsonKey(name: "indicator")
+  @HiveField(5)
+  final String? indicator;
+
   WheelEntity({
     required this.name,
     required this.createdAt,
     required this.updateAt,
     required this.options,
+    this.indicator,
+    this.banner,
   });
 
   factory WheelEntity.fromJson(Map<String, dynamic> json) => _$WheelEntityFromJson(json);
@@ -35,5 +43,13 @@ class WheelEntity extends HiveObject {
 
   static List<Map<String, dynamic>> _optionsToJson(List<WheelOption> wheelOptions) => wheelOptions.map((option) => option.toJson()).toList();
 
-  WheelModel formatToModel(int id) => WheelModel(id, name: name, createdAt: createdAt, updateAt: updateAt, options: options);
+  WheelModel formatToModel(int id) => WheelModel(
+        id,
+        name: name,
+        createdAt: createdAt,
+        updateAt: updateAt,
+        options: options,
+        banner: banner,
+        indicator: indicator,
+      );
 }

@@ -1,12 +1,18 @@
 import 'package:injectable/injectable.dart';
 import 'package:lucid_decision/modules/main/data/datasource/services/local/wheel_hive_service.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
+import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 import 'package:suga_core/suga_core.dart';
 
 abstract class WheelDatasource {
   Future<List<WheelModel>> getAllWheels();
-  Future<Unit> addWheel({required WheelModel wheel});
+
+  Future<WheelModel> getWheelById(int id);
+
+  Future<int> addWheel({required String name, required List<WheelOption> option, String? banner, String? indicator});
+
   Future<Unit> editWheel(int id, {required WheelModel editWheel});
+
   Future<Unit> deleteWheel(int id);
 }
 
@@ -17,8 +23,13 @@ class ImplLocalWheelDataSource implements WheelDatasource {
   ImplLocalWheelDataSource(this._service);
 
   @override
-  Future<Unit> addWheel({required WheelModel wheel}) {
-    return _service.addWheel(wheel: wheel.formatToEntity());
+  Future<int> addWheel({required String name, required List<WheelOption> option, String? banner, String? indicator}) {
+    return _service.addWheel(
+      name: name,
+      option: option,
+      banner: banner,
+      indicator: indicator,
+    );
   }
 
   @override
@@ -36,4 +47,8 @@ class ImplLocalWheelDataSource implements WheelDatasource {
     return _service.getAllWheels();
   }
 
+  @override
+  Future<WheelModel> getWheelById(int id) {
+   return _service.getWheelById(id);
+  }
 }

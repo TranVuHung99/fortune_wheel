@@ -5,6 +5,7 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lucid_decision/core/abstracts/app_view_model.dart';
+import 'package:lucid_decision/core/helper/ui_helper.dart';
 import 'package:lucid_decision/go_router_config.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_entity.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
@@ -78,32 +79,32 @@ class WheelCustomizePageViewModel extends AppViewModel {
   }
 
   Future<Unit> onAddWheel() async {
-    WheelModel wheel = WheelModel(
-      DateTime.now().millisecondsSinceEpoch,
-      name: wheelName,
-      createdAt: DateTime.now(),
-      updateAt: DateTime.now(),
-      options: wheelOptions,
-    );
+    if(wheelOptions.length <=  1) {
+      showToast("Please add more options");
+      return unit;
+    }
     await showLoading();
     await run(
       () async {
-        await _addWheelUsecase.run(wheel);
+        await _addWheelUsecase.run(name: wheelName, option: wheelOptions);
       },
     );
     goRouterConfig.routerDelegate.navigatorKey.currentContext?.hideKeyboard();
     await hideLoading();
-    goRouterConfig.pop();
     return unit;
   }
 
   Future<Unit> onEditWheel(WheelModel wheel) async {
+    if(wheelOptions.length <=  1) {
+      showToast("Please add more options");
+      return unit;
+    }
     await showLoading();
-    WheelModel newWheel = wheel.copyWith(options: wheelOptions, name: wheelName).formatToModel(wheel.id);
+    WheelModel newWheel = wheel.copyWithModel(options: wheelOptions, name: wheelName, updateAt: DateTime.now());
     await run(
       () async {
         await _editWheelUsecase.run(
-          wheel.id,
+          newWheel.id,
           wheel: newWheel,
         );
       },
