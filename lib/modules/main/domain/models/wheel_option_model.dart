@@ -15,8 +15,19 @@ class WheelOption extends HiveObject implements Equatable {
   @HiveField(1)
   @JsonKey(name: "color")
   final int color;
+  @HiveField(2)
+  @JsonKey(name: "ratio")
+  final int? ratio;
+  @HiveField(3)
+  @JsonKey(name: "background")
+  final String? background;
 
-  WheelOption({required this.content, required this.color});
+  WheelOption({
+    required this.content,
+    required this.color,
+    this.ratio,
+    this.background,
+  });
 
   factory WheelOption.fromJson(Map<String, dynamic> json) => _$WheelOptionFromJson(json);
 

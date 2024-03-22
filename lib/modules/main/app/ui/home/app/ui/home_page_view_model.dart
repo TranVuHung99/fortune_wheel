@@ -11,6 +11,7 @@ import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_option_model.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/add_wheel_usecase.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/get_all_wheel_usecase.dart';
+import 'package:lucid_decision/modules/main/domain/usecases/get_wheel_by_id_usecase.dart';
 import 'package:refreshed/get_rx/get_rx.dart';
 
 import 'package:suga_core/suga_core.dart';
@@ -19,11 +20,13 @@ import 'package:suga_core/suga_core.dart';
 class HomePageViewModel extends AppViewModel {
   final GetAllWheelUsecase _getAllWheelUsecase;
   final AddWheelUsecase _addWheelUsecase;
+  final GetWheelByIdUsecase _getWheelByIdUsecase;
   final EventBus _eventBus;
 
   HomePageViewModel(
     this._getAllWheelUsecase,
     this._addWheelUsecase,
+    this._getWheelByIdUsecase,
     this._eventBus,
   );
 
@@ -97,10 +100,33 @@ class HomePageViewModel extends AppViewModel {
   }
 
   Future<Unit> _addDefaultWheel() async {
+    final defaultOption = <WheelOption>[
+      WheelOption(content: "Work", color: Colors.red.value),
+      WheelOption(content: "School", color: Colors.blue.value),
+      WheelOption(content: "Gym", color: Colors.yellow.value),
+      WheelOption(content: "Sport", color: Colors.green.value),
+      WheelOption(content: "Sleep", color: Colors.amber.value),
+      WheelOption(content: "Run", color: Colors.purple.value),
+      WheelOption(content: "Clean", color: Colors.lightGreenAccent.value),
+      WheelOption(content: "Shoping", color: Colors.orange.value),
+    ];
+    const name = "What should i do today?";
     await run(() async {
-      await _addWheelUsecase.run(getDefaultWheel);
-      _currentWheel.value = getDefaultWheel;
+      final addedId = await _addWheelUsecase.run(
+        name: name,
+        option: defaultOption,
+      );
     });
+    return unit;
+  }
+
+  Future<Unit> getWheelById(int id) async {
+    await showLoading();
+    await run(() async {
+      final wheelAdd = await _getWheelByIdUsecase.run(id);
+      _currentWheel.value = wheelAdd;
+    });
+    await hideLoading();
     return unit;
   }
 
@@ -110,7 +136,7 @@ class HomePageViewModel extends AppViewModel {
       _isShowResult.value = false;
     });
     _addWheelEventListener = _eventBus.on<OnAddWheelEvent>().listen((event) {
-      _currentWheel.value = event.wheel;
+      getWheelById(event.wheelId);
       _isShowResult.value = false;
     });
     _deleteWheelEventListener = _eventBus.on<OnDeleteWheelEvent>().listen((event) {
@@ -118,21 +144,4 @@ class HomePageViewModel extends AppViewModel {
       _getWheels(isAddDefaultWheel: false);
     });
   }
-
-  WheelModel get getDefaultWheel => WheelModel(
-        DateTime.now().millisecondsSinceEpoch,
-        name: "What should i do today?",
-        createdAt: DateTime.now(),
-        updateAt: DateTime.now(),
-        options: <WheelOption>[
-          WheelOption(content: "Work", color: Colors.red.value),
-          WheelOption(content: "School", color: Colors.blue.value),
-          WheelOption(content: "Gym", color: Colors.yellow.value),
-          WheelOption(content: "Sport", color: Colors.green.value),
-          WheelOption(content: "Sleep", color: Colors.amber.value),
-          WheelOption(content: "Run", color: Colors.purple.value),
-          WheelOption(content: "Clean", color: Colors.lightGreenAccent.value),
-          WheelOption(content: "Shoping", color: Colors.orange.value),
-        ],
-      );
 }

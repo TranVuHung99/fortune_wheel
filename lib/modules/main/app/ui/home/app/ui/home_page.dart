@@ -3,6 +3,7 @@ import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucid_decision/core/extensions/string_ext.dart';
+import 'package:lucid_decision/core/helper/ui_helper.dart';
 import 'package:lucid_decision/go_router_config.dart';
 import 'package:lucid_decision/injector.dart';
 import 'package:lucid_decision/locale_keys.g.dart';
@@ -40,6 +41,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with Aut
     return SafeArea(
       child: Obx(
         () => Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             primary: false,
             elevation: 0.0,
@@ -121,7 +123,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with Aut
                                   child: Container(
                                     constraints: BoxConstraints(maxHeight: 50.h),
                                     margin: EdgeInsets.only(left: 50.w, right: 5.w),
-                                    child: Text(option.content),
+                                    child: RichText(text: displayEmoji(option.content),)
                                   ),
                                   style: FortuneItemStyle(
                                     color: Color(option.color),
