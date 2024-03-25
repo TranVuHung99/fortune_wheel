@@ -100,7 +100,18 @@ class WheelCustomizePageViewModel extends AppViewModel {
       return unit;
     }
     await showLoading();
-    WheelModel newWheel = wheel.copyWithModel(options: wheelOptions, name: wheelName, updateAt: DateTime.now());
+    WheelModel newWheel = wheel.copyWithModel(options: [
+      WheelOption(content: "Work", color: Colors.red.value, ratio: 2),
+      WheelOption(content: "School", color: Colors.blue.value,ratio:  1),
+      WheelOption(content: "Gym", color: Colors.yellow.value,ratio: 4),
+      WheelOption(content: "Ball", color: Colors.yellow.value),
+      WheelOption(content: "Ero", color: Colors.yellow.value, ratio: 3),
+      // WheelOption(content: "Sport", color: Colors.green.value),
+      // WheelOption(content: "Sleep", color: Colors.amber.value),
+      // WheelOption(content: "Run", color: Colors.purple.value),
+      // WheelOption(content: "Clean", color: Colors.lightGreenAccent.value),
+      // WheelOption(content: "Shoping", color: Colors.orange.value),
+    ], name: wheelName, updateAt: DateTime.now());
     await run(
       () async {
         await _editWheelUsecase.run(

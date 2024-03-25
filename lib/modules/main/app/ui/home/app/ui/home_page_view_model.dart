@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lucid_decision/core/abstracts/app_view_model.dart';
+import 'package:lucid_decision/gen/assets.gen.dart';
 import 'package:lucid_decision/modules/main/domain/events/on_add_wheel_event.dart';
 import 'package:lucid_decision/modules/main/domain/events/on_delete_wheel_event.dart';
 import 'package:lucid_decision/modules/main/domain/events/on_done_editing_wheel_event.dart';
@@ -13,6 +15,7 @@ import 'package:lucid_decision/modules/main/domain/usecases/add_wheel_usecase.da
 import 'package:lucid_decision/modules/main/domain/usecases/get_all_wheel_usecase.dart';
 import 'package:lucid_decision/modules/main/domain/usecases/get_wheel_by_id_usecase.dart';
 import 'package:refreshed/get_rx/get_rx.dart';
+import 'dart:ui' as ui;
 
 import 'package:suga_core/suga_core.dart';
 
@@ -32,6 +35,8 @@ class HomePageViewModel extends AppViewModel {
 
   Rx<int> streamController = 0.obs;
 
+  final _listOptionBackgrounds = RxList<ui.Image?>([]);
+
   final _resultLabel = "".obs;
 
   String get resultLabel => _resultLabel.value;
@@ -41,6 +46,8 @@ class HomePageViewModel extends AppViewModel {
   final RxBool _isShowResult = RxBool(false);
 
   bool get isShowResult => _isShowResult.value;
+
+  List<ui.Image?> get listOptionBackgrounds => _listOptionBackgrounds.toList();
 
   set isShowResult(bool value) => _isShowResult.value = value;
 
@@ -58,6 +65,27 @@ class HomePageViewModel extends AppViewModel {
   void initState() {
     _loadData();
     super.initState();
+  }
+
+  Future<Unit> _loadOptionsBackground(List<WheelOption> options) async {
+    List<ui.Image?> loaded = [];
+    for(final opt in options) {
+      final image = await _loadImageFromAssets(opt.background);
+      loaded.add(image);
+    }
+    _listOptionBackgrounds.assignAll(loaded);
+    return unit;
+  }
+
+  Future<ui.Image?> _loadImageFromAssets(String? path) async {
+    if(path == null) return null;
+    final ByteData assetImageByteData = await rootBundle.load("resources/images/test.png");
+    final codec = await ui.instantiateImageCodec(
+      assetImageByteData.buffer.asUint8List(),
+    );
+    final imageInfo = await codec.getNextFrame();
+
+    return imageInfo.image;
   }
 
   @override
@@ -95,13 +123,16 @@ class HomePageViewModel extends AppViewModel {
         _currentWheel.value = null;
       }
     }
+    if(currentWheel != null){
+      await _loadOptionsBackground(currentWheel!.options);
+    }
     await hideLoading();
     return unit;
   }
 
   Future<Unit> _addDefaultWheel() async {
     final defaultOption = <WheelOption>[
-      WheelOption(content: "Work", color: Colors.red.value),
+      WheelOption(content: "Work", color: Colors.red.value, ratio: 2),
       WheelOption(content: "School", color: Colors.blue.value),
       WheelOption(content: "Gym", color: Colors.yellow.value),
       WheelOption(content: "Sport", color: Colors.green.value),

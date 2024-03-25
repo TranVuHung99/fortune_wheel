@@ -1,19 +1,29 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucid_decision/core/extensions/string_ext.dart';
 import 'package:lucid_decision/core/helper/ui_helper.dart';
+import 'package:lucid_decision/gen/assets.gen.dart';
 import 'package:lucid_decision/go_router_config.dart';
 import 'package:lucid_decision/injector.dart';
 import 'package:lucid_decision/locale_keys.g.dart';
 import 'package:lucid_decision/modules/main/app/ui/history/history_wheel_page.dart';
 import 'package:lucid_decision/modules/main/app/ui/home/app/ui/home_page_view_model.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel/core/core.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel/core/fortune_item.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel/core/styling.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel/indicators/indicators.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel/indicators/shared.dart';
+import 'package:lucid_decision/modules/main/app/ui/wheel/wheel/wheel.dart';
 import 'package:lucid_decision/modules/main/app/ui/wheel_customize/wheel_customize_page.dart';
 import 'package:lucid_decision/modules/main/domain/models/wheel_model.dart';
 import 'package:lucid_decision/theme/ui_text_style.dart';
 import 'package:refreshed/refreshed.dart';
 import 'package:suga_core/suga_core.dart';
+import 'dart:ui' as ui;
 
 class HomePage extends StatefulWidget {
   static String routeName = 'HomePage';
@@ -29,6 +39,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with AutomaticKeepAliveClientMixin {
+
   @override
   void loadArguments() {
     viewModel.loadArguments(widget.wheel);
@@ -73,6 +84,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with Aut
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
                     SizedBox(height: 40.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +118,6 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with Aut
                           child: FortuneWheel(
                             selected: viewModel.streamController.stream,
                             animateFirst: false,
-                            physics: NoPanPhysics(),
                             indicators: <FortuneIndicator>[
                               FortuneIndicator(
                                 alignment: Alignment.topCenter,
@@ -118,8 +129,9 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with Aut
                               ),
                             ],
                             items: [
-                              for (final option in viewModel.currentWheel!.options)
+                              for (final (id, option) in viewModel.currentWheel!.options.indexed)
                                 FortuneItem(
+                                  ratio: option.ratio ?? 1,
                                   child: Container(
                                     constraints: BoxConstraints(maxHeight: 50.h),
                                     margin: EdgeInsets.only(left: 50.w, right: 5.w),
@@ -130,6 +142,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with Aut
                                     borderColor: Colors.white,
                                     textAlign: TextAlign.start,
                                     textStyle: UITextStyle.black_18_bold,
+                                    image: viewModel.listOptionBackgrounds[id]
                                   ),
                                 ),
                             ],
@@ -144,7 +157,7 @@ class _HomePageState extends BaseViewState<HomePage, HomePageViewModel> with Aut
                         ),
                         GestureDetector(
                           onTap: () {
-                            viewModel.streamController.value = Fortune.randomInt(0, viewModel.currentWheel!.options.length);
+                            viewModel.streamController.value = Random().nextInt(viewModel.currentWheel!.options.length);
                           },
                           child: Container(
                             alignment: Alignment.center,

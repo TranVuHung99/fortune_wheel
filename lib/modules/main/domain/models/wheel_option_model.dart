@@ -34,7 +34,7 @@ class WheelOption extends HiveObject implements Equatable {
   Map<String, dynamic> toJson() => _$WheelOptionToJson(this);
 
   @override
-  List<Object?> get props => [color];
+  List<Object?> get props => [content, color, ratio, background];
 
   @override
   bool? get stringify => null;
